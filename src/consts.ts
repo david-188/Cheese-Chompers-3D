@@ -11,7 +11,7 @@ export const SITE_DOMAIN_WITH_PROTOCOL = `https://${SITE_DOMAIN}`;
 export const SITE_DESCRIPTION = 'Cheese Chompers 3D is a fast-paced, browser-based multiplayer knockout game where you control wobbly rats battling in chaotic cheese-themed arenas. Master mid-air flips, use momentum to knock opponents off the platform, and enjoy explosive, hilarious physics-driven action. Play free online with simple controls and join the fun today!';
 
 // 谷歌分析
-export const GA_TAG = 'G-R1BQT953K1';
+export const GA_TAG = 'G-L5RBH2Y1RV';
 
 // 支持邮箱
 export const SUPPORT_EMAIL = 'support@site.com';
