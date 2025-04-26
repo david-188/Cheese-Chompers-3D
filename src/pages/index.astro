@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Welcome from '../components/Welcome.astro';
+import Layout from '../layouts/Layout.astro';
+import GameFrame from '../components/GameFrame.astro';
+import ShareButtons from '../components/ShareButtons.tsx';
+import CategoryCards from '../components/CategoryCards.astro';
+import GameCard from '../components/GameCard.astro';
+import GameDetails from '../components/GameDetails.astro';
+import { HOME_GAME } from '../consts';
+
+const games = await getCollection('games');
+games.sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+const game = games.find((game) => game.data.slug === HOME_GAME);
+
+---
+
+<Layout title="Cheese Chompers 3D | Play Free Online Knockout Game" description="Experience chaotic fun with Cheese Chompers 3D! Play the free browser game, knock wobbly rats off platforms, & master the flip for speed boosts! No downloads!">
+	<GameFrame game={game} />
+	<!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 p-2">
+		{games.map((game) => (
+			<GameCard game={game} />
+		))}
+	</div> -->
+
+	<!-- <CategoryCards/> -->
+
+	<GameDetails game={game} />
+</Layout>
+
+<style is:global>
+	body {
+		font-family: 'Atkinson';
+	}
+</style>

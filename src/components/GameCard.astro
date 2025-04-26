@@ -1,0 +1,27 @@
+---
+const { game,showAsHeading = false } = Astro.props;
+import { Image } from 'astro:assets';
+
+---
+
+<a href={`/game/${game.id}`} class="bg-gray-100 rounded-lg p-2 w-full hover:bg-gray-300 relative group hover:cursor-pointer">
+  <div class="min-h-fit">
+    <Image src={game.data.heroImage} 
+    width={200}
+    height={100}
+    class="object-cover rounded-lg w-full h-[180px]"
+    alt={game.data.title} 
+    />
+  </div>
+  <div class="absolute inset-0  bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-end">
+    {showAsHeading ? <h3 class="font-bold text-white text-center w-full">{game.data.title}</h3> : <span class="font-bold text-white text-center w-full">{game.data.title}</span>}
+  </div>
+</a>
+
+<style>
+  h3{
+    font-size: 1rem;
+    margin: 0.7rem 0;
+    color: white;
+  }
+</style>

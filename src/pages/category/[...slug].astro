@@ -1,0 +1,36 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE } from '../../consts';
+import GameCard from '../../components/GameCard.astro';
+import Layout from '../../layouts/Layout.astro';
+import CategoryCards from '../../components/CategoryCards.astro';
+
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+    const categories = await getCollection('categories');
+    return categories.map((category) => ({
+        params: { slug: category.data.slug },
+        props: { category },
+    }));
+}
+
+const { category } = Astro.props;
+const allGames =  await getCollection("games")
+const games = allGames.filter((game)=>game.data.category == category.data.slug)
+
+
+---
+
+<Layout title={category.data.title} description={category.data.description}>
+    <h1 class="text-2xl font-bold mb-4 mt-4">{category.data.title}</h1>
+    <p class="text-gray-600 mb-8">{category.data.description}</p>
+    <CategoryCards/>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 lg:px-32 py-4">
+        {games.map((game)=>(
+            <GameCard game={game} showAsHeading={true}/>
+        ))}
+    </div>
+</Layout>

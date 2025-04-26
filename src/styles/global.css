@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@plugin '@tailwindcss/typography';
+
+
+
+:root {
+	--color-primary: #4c1d95;
+	--color-secondary: #6d28d9;
+	--color-text: #111827;
+	--color-text-light: rgb(78, 80, 86);
+	--color-background: #fff;
+	--color-background-alt: #fef3c7;
+	--color-border: #e5e7eb;
+	--gray: #6b7280;
+	
+	--font-family: 'Atkinson', Inter, Roboto, 'Helvetica Neue', 'Arial Nova', 'Nimbus Sans', Arial, sans-serif;
+	
+	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+	--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+
+@font-face {
+	font-family: 'Atkinson';
+	src: url('/fonts/atkinson-regular.woff') format('woff');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+@font-face {
+	font-family: 'Atkinson';
+	src: url('/fonts/atkinson-bold.woff') format('woff');
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+
+html,
+body {
+  font-family: 'Atkinson', sans-serif;
+}

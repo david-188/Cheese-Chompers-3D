@@ -1,0 +1,10 @@
+CREATE TABLE comments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  content_id TEXT NOT NULL,  -- 文章或页面 ID
+  parent_id INTEGER DEFAULT NULL,  -- 父评论 ID（支持回复）
+  name TEXT NOT NULL,
+  email TEXT NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  likes INTEGER DEFAULT 0
+);

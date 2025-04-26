@@ -1,0 +1,22 @@
+---
+
+const game = Astro.props.game;
+
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": game?.data.title,
+  "description": game?.data.description,
+  "operatingSystem": "Web Browser",
+  "applicationCategory": "Game",
+  "url": Astro.url.href,
+  "genre": game?.data?.category,
+  "offers": {
+    "@type": "Offer",
+    "price": 0.00,
+    "priceCurrency": "USD"
+  }
+})}>
+</script>

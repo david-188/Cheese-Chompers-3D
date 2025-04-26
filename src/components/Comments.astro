@@ -1,0 +1,156 @@
+---
+const {game} = Astro.props;
+const contentId = Astro.site+game.data.slug;
+---
+
+<section id="comments" class="comments p-4 max-h-[500px] overflow-y-auto" data-content-id={contentId}>
+  <h2 class="text-2xl font-bold mt-4">Comments</h2>
+  
+  <form id="comment-form" method="POST" class="flex flex-col gap-2">
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center gap-2">
+        <input type="text" name="name" placeholder="Name" class="w-full border-2 border-gray-300 rounded-md p-2" />
+        <input type="email" name="email" placeholder="Email" class="w-full border-2 border-gray-300 rounded-md p-2" />
+      </div>
+      <textarea name="content" placeholder="Add a comment" class="w-full border-2 border-gray-300 rounded-md p-2"></textarea>
+    </div>
+    <input type="hidden" name="content_id" value={contentId} id="content_id"/>
+    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md mt-2 max-w-48 hover:cursor-pointer">Add Comment</button>
+  </form>
+
+  <div id="comments-list">
+    <!-- Comments will be loaded here -->
+  </div>
+</section>
+
+<script>
+  // 评论接口地址
+  const workerUrl = 'https://worker.domain.com';
+  // 获取内容ID
+  const contentId = (document.querySelector('#comments') as HTMLElement)?.dataset.contentId;
+  console.log('Script loaded, contentId:', contentId);
+
+  // Load comments on page load
+  async function loadComments() {
+    if (!contentId) {
+      console.error('No contentId found');
+      return;
+    }
+    
+    const url = `${workerUrl}/api/comments?content_id=${encodeURIComponent(contentId)}`;
+    console.log("Request URL:", url);
+    
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'Origin': window.location.origin,
+          'Accept': 'application/json'
+        },
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const text = await response.text();
+      console.log('Raw response:', text);
+      
+      const comments = JSON.parse(text);
+      console.log('Parsed comments:', comments);
+      
+      const commentsHtml = comments.map((comment: any) => `
+        <div class="rounded-lg border-2 border-gray-300 p-4 w-full mt-4">
+          <div class="flex justify-between items-center">
+            <span class="text-lg font-bold">${comment.name}</span>
+            <span class="text-sm text-gray-500">${comment.created_at}</span>
+          </div>
+          <div class="mt-2 text-gray-700">${comment.content}</div>
+        </div>
+      `).join('');
+      
+      const commentsList = document.getElementById('comments-list');
+      if (commentsList) {
+        commentsList.innerHTML = commentsHtml;
+      }
+    } catch (error) {
+      console.error('Error loading comments:', error);
+      const commentsList = document.getElementById('comments-list');
+      if (commentsList) {
+        commentsList.innerHTML = `
+          <div class="text-red-500 mt-4">
+            Error loading comments. Please try again later.
+          </div>
+        `;
+      }
+    }
+  }
+
+  // 立即执行
+  loadComments();
+
+  // 同时也监听 DOMContentLoaded 以确保不会错过
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadComments);
+  }
+
+  // Rest of your existing script code...
+  document.getElementById("comment-form")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const data = Object.fromEntries(formData.entries());
+    if (!data.parent_id) delete data.parent_id;
+
+    try {
+      const res = await fetch(`${workerUrl}/api/comments`, {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          'Origin': window.location.origin,
+        },
+        credentials: 'include',
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        // Reload comments instead of full page
+        loadComments();
+        // Clear form
+        (e.target as HTMLFormElement).reset();
+      } else {
+        console.error('Failed to submit comment:', await res.text());
+      }
+    } catch (error) {
+      console.error('Error submitting comment:', error);
+    }
+  });
+
+  async function likeComment(commentId: string) {
+    const res = await fetch(`${workerUrl}/api/comments`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ comment_id: commentId })
+    });
+
+    if (res.ok) {
+      const button = document.querySelector(`#comment-${commentId} button`);
+      if (button) {
+        button.textContent = `Like ${parseInt(button.textContent?.replace("Like", "").trim() ?? "0") + 1}`;
+      }
+    } else {
+      alert("点赞失败");
+    }
+  }
+
+  function setReply(commentId: string) {
+    const parentIdInput = document.getElementById("parent_id") as HTMLInputElement;
+    if (parentIdInput) {
+      parentIdInput.value = commentId;
+    }
+    const contentTextarea = document.querySelector("textarea[name='content']") as HTMLTextAreaElement;
+    if (contentTextarea) {
+      contentTextarea.focus();
+    }
+  }
+</script>
+

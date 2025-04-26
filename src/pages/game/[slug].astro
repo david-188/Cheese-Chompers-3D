@@ -1,0 +1,62 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import GameFrame from '../../components/GameFrame.astro';
+import ShareButtons from '../../components/ShareButtons.tsx';
+import CategoryCards from '../../components/CategoryCards.astro';
+import GameCard from '../../components/GameCard.astro';
+import GameDetails from '../../components/GameDetails.astro';
+import Schema from '../../components/Schema.astro';
+const { slug } = Astro.params;
+const games = await getCollection('games');
+const game = games.find((game) => game.data.slug === slug);
+
+if (!game) {
+	Astro.redirect('/404');
+}
+
+export async function getStaticPaths() {
+  const games = await getCollection('games');
+	return games.map((game) => ({
+		params: { slug: game.data.slug },
+		props: { game },
+	}));
+}
+
+---
+
+<Layout title={game?.data.title ?? ''} description={game?.data.description ?? ''}>
+	<GameFrame game={game} />
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 p-2">
+		{games.map((game) => (
+			<GameCard game={game} />
+		))}
+	</div>
+	<CategoryCards/>
+
+	<GameDetails game={game} />
+</Layout>
+
+<style is:global>
+	body {
+		font-family: 'Atkinson';
+	}
+</style>
+
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": game?.data.title,
+  "description": game?.data.description,
+  "operatingSystem": "Web Browser",
+  "applicationCategory": "Game",
+  "url": Astro.url.href,
+  "genre": game?.data?.category,
+  "offers": {
+    "@type": "Offer",
+    "price": 0.00,
+    "priceCurrency": "USD"
+  }
+})}>
+</script>

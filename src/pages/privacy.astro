@@ -1,0 +1,53 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { SUPPORT_EMAIL } from "../consts";
+---
+
+<Layout 
+  title="Privacy Policy" 
+  description="Privacy Policy">
+
+  <h1 class="text-2xl font-bold p-4">Privacy Policy</h1>
+  <article class="w-full p-4">
+    <p>Last updated: 2024</p>
+
+    <h2>1. Information Collection</h2>
+    <p>We may collect the following information:</p>
+    <ul>
+      <li>Basic access information (such as IP address, browser type, access time)</li>
+      <li>Information you voluntarily provide</li>
+    </ul>
+
+    <h2>2. Use of Information</h2>
+    <p>The information we collect is used for:</p>
+    <ul>
+      <li>Providing and improving our services</li>
+      <li>Analyzing website usage</li>
+      <li>Necessary communication with you</li>
+    </ul>
+
+    <h2>3. Information Protection</h2>
+    <p>We implement appropriate technical and organizational measures to protect your personal information.</p>
+
+    <h2>4. Use of Cookies</h2>
+    <p>Our website may use cookies to enhance user experience. You can control cookies through your browser settings.</p>
+
+    <h2>5. Third-Party Services</h2>
+    <p>Our website may contain links to third-party services. These third parties have their own privacy policies, and we are not responsible for their content or practices.</p>
+
+    <h2>6. Updates to Privacy Policy</h2>
+    <p>We reserve the right to update this privacy policy at any time. Updated policies will be posted on this page.</p>
+
+    <h2>7. Contact Us</h2>
+    <p>If you have any questions about this privacy policy, please contact us at:</p>
+    <p class="text-blue-500 font-semibold">{SUPPORT_EMAIL}</p>
+  </article>
+
+</Layout>
+
+<style>
+  h2{
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+</style>

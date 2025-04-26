@@ -1,0 +1,54 @@
+---
+import type { PaginateFunction } from 'astro';
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import GameCard from '../../components/GameCard.astro';
+import CategoryCards from '../../components/CategoryCards.astro';
+import { SITE_TITLE } from '../../consts';
+export async function getStaticPaths({ paginate }: { paginate: PaginateFunction }) {
+  const response = await getCollection('games');
+  const allGames = response.filter((game) => game.data.isHot).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  
+  // 使用 paginate() 函数来生成分页路由
+  return paginate(allGames, { pageSize: 12 });
+}
+
+const { page } = Astro.props;
+
+---
+
+<Layout title="Hot Games" description={`Found ${page.data.length} hot games on ${SITE_TITLE}`}>
+  <section class="min-h-[80vh] p-2">
+    <h1 class="text-2xl font-bold mt-4">Hot Games</h1>
+    <CategoryCards/>
+    <div class="min-h-[600px] overflow-y-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 mt-4 ">
+        {page.data.map((game) => (
+          <GameCard game={game} showAsHeading={true} />
+        ))}
+      </div>
+    </div>
+
+    <div class="flex justify-center gap-2 mt-8">
+      {page.url.prev && (
+        <a 
+          href={page.url.prev} 
+          class="block transform transition-transform duration-200 hover:scale-[1.01] will-change-transform px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Previous
+        </a>
+      )}
+      <span class="px-4 py-2">
+        Page {page.currentPage} of {page.lastPage}
+      </span>
+      {page.url.next && (
+        <a 
+          href={page.url.next} 
+          class="block transform transition-transform duration-200 hover:scale-[1.01] will-change-transform px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+        >
+          Next
+        </a>
+      )}
+    </div>
+  </section>
+</Layout>

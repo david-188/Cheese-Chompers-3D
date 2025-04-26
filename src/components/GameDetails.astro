@@ -1,0 +1,64 @@
+---
+import { render } from 'astro:content';
+const { game } = Astro.props;
+const { Content } = await render(game);
+import { getCollection } from 'astro:content';
+import { LEFT_GAMES, RIGHT_GAMES } from '../consts';
+const leftGames = (await getCollection('games')).filter((game) => game.data.slug && LEFT_GAMES.includes(game.data.slug));
+
+const rightGames = (await getCollection('games')).filter((game) => game.data.slug && RIGHT_GAMES.includes(game.data.slug));
+import Comments from './Comments.astro';
+import GameCard from './GameCard.astro';
+import Prose from './Prose.astro';
+---
+
+<section id="game-details mt-3 py-4">
+  <div class="flex flex-col xl:flex-row gap-4 h-full">
+      
+    <div class="w-full xl:w-64 overflow-y-auto max-h-fit bg-gray-200 rounded-lg">
+      <div class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-1 gap-4 sticky top-4 p-4">
+        {leftGames.map((game) => (
+          <GameCard game={game} />
+        ))}
+      </div>
+    </div>
+    
+    <div class="flex-1 px-3 bg-gray-100 rounded-lg p-4">
+      <p class="text-4xl font-bold">Know about {game.data.title}</p>
+      <nav class="flex items-center gap-2 text-sm text-gray-500 py-2">
+        <a href="/" class="hover:text-gray-700">Home</a>
+        <span>/</span>
+        <a href={`/categories/${game.data.category}`} class="hover:text-gray-700">{game.data.category}</a>
+        <span>/</span>
+        <span class="text-gray-700">{game.data.title}</span>
+      </nav>
+      <div class="flex items-center gap-2 text-sm text-gray-500 py-2">
+        {game.data?.tags?.map((tag:string) => (
+          <span class="hover:text-gray-700 bg-gray-200 px-2 py-1 rounded-full text-sky-600 hover:cursor-pointer">{tag}</span>
+        ))}
+      </div>
+      
+      <Prose>
+        <Content/>
+      </Prose>
+      <div class="pt-4 px-2 border-t border-gray-200 bg-gray-200 rounded-lg mt-8">
+        <Comments game={game}/>
+      </div>
+    </div>
+    
+    <div class="w-full xl:w-64 overflow-y-auto max-h-fit bg-gray-200 rounded-lg">
+      <div class="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-1 gap-4 sticky top-4 p-4">
+        {rightGames.map((game) => (
+          <GameCard game={game} />
+        ))}
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<style>
+  section {
+    margin-top: 2rem;
+  }
+</style>

@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content'
+
+const games = await getCollection('games')
+---
+
+<div class="relative">
+  <input type="text" placeholder="Search Games" id="searchInput" 
+    class="border border-gray-300 rounded-xl p-2 w-64" />
+  <button 
+    id="searchBtn"
+    class="bg-amber-500 text-white px-4 py-2 rounded-xl hover:bg-amber-600">
+    Search
+  </button>
+
+  <!-- 搜索结果容器 -->
+  <div id="searchResults" class="absolute top-full left-0 w-full mt-2 bg-white rounded-lg shadow-lg max-h-96 overflow-y-auto hidden z-40 flex flex-col gap-2 p-2">
+  </div>
+</div>
+
+<script define:vars={{games}}>
+  const searchBtn = document.getElementById('searchBtn')
+  const searchInput = document.getElementById('searchInput')
+  const searchResults = document.getElementById('searchResults')
+
+  function renderResults(filteredGames) {
+    if (!filteredGames.length) {
+      searchResults.innerHTML = '<p class="p-4 text-gray-500">No results found</p>'
+      searchResults.classList.remove('hidden')
+      return
+    }
+
+    const resultsHtml = filteredGames.map(game => `
+      <a href="/game/${game.data.slug}" class="block p-2 hover:bg-gray-100 transition-colors duration-200 ring-1 ring-gray-200 rounded-lg">
+        <div class="flex items-start gap-3">
+          <img src="${game.data.heroImage}" alt="${game.data.title}" class="w-12 h-12 object-cover rounded-lg" />
+          <div class="flex-1 min-w-0">
+            <h3 class="font-semibold text-gray-900 truncate">${game.data.title}</h3>
+            <p class="text-sm text-gray-600 line-clamp-2">${game.data.description || ''}</p>
+          </div>
+        </div>
+      </a>
+    `).join('')
+
+    searchResults.innerHTML = resultsHtml
+    searchResults.classList.remove('hidden')
+  }
+
+  searchBtn?.addEventListener('click', () => {
+    const searchValue = searchInput?.value
+    const filteredGames = games.filter((game) => 
+      game.data.title.toLowerCase().includes(searchValue.toLowerCase())
+    )
+    renderResults(filteredGames)
+  })
+
+  // 点击页面其他地方时隐藏结果
+  document.addEventListener('click', (e) => {
+    if (!searchResults.contains(e.target) && e.target !== searchInput && e.target !== searchBtn) {
+      searchResults.classList.add('hidden')
+    }
+  })
+</script>

@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content';
+import { SITE_BRAND, FRIEND_LINKS, SITE_DOMAIN_WITH_PROTOCOL } from '../consts';
+
+const today = new Date();
+
+const posts = (await getCollection('games')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<footer class="bg-gray-50 mt-4 p-4">
+	<div class="grid grid-cols-2 md:grid-cols-6 gap-2 py-4 max-w-screen-2xl mx-auto p-4 place-items-center">
+		{posts.map((post) => (
+			<a class="text-gray-700 text-sm hover:text-gray-900" href={`/game/${post.data.slug}`} class="text-sm text-gray-200 hover:text-gray-700">{post.data.title}</a>
+		))}
+	</div>
+	
+	<div class="mt-2 p-4 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-6 place-items-center  gap-2 items-center justify-center max-w-screen-2xl mx-auto border-t border-gray-300">
+		{FRIEND_LINKS.map((link) => (
+			<a class="text-gray-700 text-sm hover:text-gray-900" href={link.url} class="text-sm text-gray-600 hover:text-gray-700" target="_blank">{link.name}</a>
+		))}
+	</div>
+
+	
+	
+	<div class="pt-8 text-center text-gray-700 text-sm pb-6 flex flex-col gap-2 ">
+		<span>Disclaimer: <a class="text-blue-400" href={SITE_DOMAIN_WITH_PROTOCOL}>{SITE_BRAND}</a> is an independent website and is not affiliated with any organizations.</span>
+		
+		
+
+		<span>&copy; {today.getFullYear()} {SITE_BRAND}. All rights reserved.</span>
+		
+		<div class="flex justify-center gap-2">
+			<a class="text-gray-700 text-sm hover:text-gray-900" href="/privacy" class="text-sm text-gray-200 hover:text-gray-700">Privacy Policy</a>
+			<a class="text-gray-700 text-sm hover:text-gray-900" href="/contact" class="text-sm text-gray-200 hover:text-gray-700">Contact Us</a>
+			<a class="text-gray-700 text-sm hover:text-gray-900" href="/about" class="text-sm text-gray-200 hover:text-gray-700">About</a>
+		</div>
+	</div>
+</footer>
+<style>
+	
+	
+</style>
