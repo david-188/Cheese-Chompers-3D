@@ -19,7 +19,7 @@ Cheese Chompers 3D is an exciting, physics-based knockout game that has captured
 
 ---
 
-## What is Cheese Chompers 3D?
+## What is Cheese Chompers 3D??
 
 Cheese Chompers 3D is a free-to-play, browser-based multiplayer game developed using Unity and WebGL technology. Players take control of quirky, wobbling rat characters and engage in knockout battles within cheese-inspired arenas. The game’s core mechanic revolves around using momentum and timing to push opponents off the platform while maintaining your own balance.
 
