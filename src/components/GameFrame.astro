@@ -60,7 +60,9 @@ import { Icon } from 'astro-icon/components'
         allow="fullscreen; autoplay; encrypted-media"
         loading="lazy"
         sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
-        referrerpolicy="origin">
+        referrerpolicy="origin"
+        frameborder="0"
+        scrolling="no">
       </iframe>
       <div id="fullscreen-wrapper" class="absolute bottom-4 right-4 hidden opacity-20 hover:opacity-100 transition-opacity duration-300">
         <button id="fullscreen-button" class="bg-black/80 text-white px-6 py-3 rounded-full font-medium flex items-center gap-2 hover:bg-black/90 transition-colors hover:cursor-pointer">
@@ -95,10 +97,12 @@ function loadGame() {
     loadingSpinner?.classList.remove('hidden');
     fullscreenWrapper?.classList.remove('hidden');
     
-    // 修改iframe的src设置方式
+    // 使用itch.io的官方嵌入方式
     const embedUrl = new URL(gameEmbed);
     embedUrl.searchParams.set('iframe', 'true');
     embedUrl.searchParams.set('bg_color', '000000');
+    embedUrl.searchParams.set('border_width', '0');
+    embedUrl.searchParams.set('border_radius', '0');
     iframeEl.src = embedUrl.toString();
     
     // Add iframe load event listener
