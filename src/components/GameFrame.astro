@@ -94,7 +94,12 @@ function loadGame() {
     frameEl.classList.remove('hidden');
     loadingSpinner?.classList.remove('hidden');
     fullscreenWrapper?.classList.remove('hidden');
-    iframeEl.src = gameEmbed;
+    
+    // 修改iframe的src设置方式
+    const embedUrl = new URL(gameEmbed);
+    embedUrl.searchParams.set('iframe', 'true');
+    embedUrl.searchParams.set('bg_color', '000000');
+    iframeEl.src = embedUrl.toString();
     
     // Add iframe load event listener
     iframeEl.addEventListener('load', () => {
