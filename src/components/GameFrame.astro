@@ -58,7 +58,9 @@ import { Icon } from 'astro-icon/components'
         src="" 
         class="w-full h-full border-0"
         allow="fullscreen; autoplay; encrypted-media"
-        loading="lazy">
+        loading="lazy"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+        referrerpolicy="origin">
       </iframe>
       <div id="fullscreen-wrapper" class="absolute bottom-4 right-4 hidden opacity-20 hover:opacity-100 transition-opacity duration-300">
         <button id="fullscreen-button" class="bg-black/80 text-white px-6 py-3 rounded-full font-medium flex items-center gap-2 hover:bg-black/90 transition-colors hover:cursor-pointer">

@@ -6,7 +6,7 @@ description: 'Experience chaotic fun with Cheese Chompers 3D! Play the free brow
 pubDate: 'Apr 17 2025'
 heroImage: '/games/cheese-chompers-3d.jpg'
 category: 'car'
-embed: 'https://rawcdn.githack.com/gn-math/assets/main/165/index.html'
+embed: 'https://cheesechompers3d.itch.io/cheese-chompers-3d'
 tags: ["cheese-chompers-3d"]
 ---
 
